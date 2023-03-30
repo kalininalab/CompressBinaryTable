@@ -1,6 +1,7 @@
 import pandas as pd
 
 
+# Compresses the binary table
 def compression_algorithm(input_file):
 
     if input_file.endswith(".csv"):
@@ -38,6 +39,7 @@ def compression_algorithm(input_file):
     return dictionary_of_strains_data, columns, selection
 
 
+# Writes compressed file into outfile 
 def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selection):
 
     with open(outfile, "w") as compressed_file:
@@ -50,11 +52,95 @@ def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selecti
             compressed_file.write(str(key))
             for index in dictionary_of_strains_data[key]:
                 compressed_file.write(";" + str(index))
+            
+            compressed_file.write("\n")
 
 
+# Decompresses the compressed file
+def decompress_file(compressed_file):
 
-dictionary, columns, sel = compression_algorithm("./combined_binary_mutations_non_snp_corrected_0.2_column_corrected.tsv")
+    # Check if given file is properly formatted
+
+    if not compressed_file.endswiht(".cbt"):
+        print("Given file is not cbt format")
+        return -1
+
+    with open(compressed_file) as infile:
+        lines = infile.readlines()
+
+    default_value = str(lines[0].split(";")[0])
+
+    # Checks if it is binary matrix
+
+    if default_value not in ["0" ,"1"]:
+        print("Given table is not binary")
+        return -1
+    
+    all_the_strains = []
+
+    # Set the value which will printed to indexes
+    
+    if default_value == "0":
+        indexed_value = "1"
+    else:
+        indexed_value = "0"
+    
+    columns = lines[0][1:]
+
+    first_line = []
+
+    first_line.append("name/position")
+    columns_split = columns.split(";")
+    for col in columns_split:
+        first_line.append(col)
+
+    all_the_strains.append(first_line)
+
+    for line in lines[1:]:
+        splitted = line.split(";")
+        strain_name = splitted[0]
+        temp_list = [default_value for _ in range(len(columns.split(";"))+1)]
+        temp_list[0] = strain_name
+        for index in splitted[1:]:
+            temp_list[index] = indexed_value
+
+        all_the_strains.append(temp_list)
+
+
+    return all_the_strains
+
+
+# Prints decompressed file to given file name
+def decompress_file_printer(outfile_name, all_the_strains, outfile_type="tsv"):
+
+    seperator = None
+
+    if outfile_type == "tsv":
+        seperator = "\t"
+    elif outfile_type == "csv":
+        seperator = ","
+    else:
+        print("Outfile type can be only csv or tsv")
+        return -1
+
+    with open(outfile_name + ".%s" %outfile_type , "w") as ofile:
+
+        for line in all_the_strains:
+            ofile.write(str(line[0]))
+            for elem in line[1:]:
+                ofile.write(seperator + str(elem))
+            
+            ofile.write("\n")
+    
+    return 0
+
+
+dictionary, columns, sel = compression_algorithm("./combined_binary_mutations_non_snp_corrected_0.05.tsv")
 
 compressed_file_writer("./test.cbt", dictionary, columns, sel)
+
+dictionary2, columns2, sel2 = compression_algorithm("/scratch/SCRATCH_SAS/alper/Mycobacterium/non_dropped/combined_binary_mutations.tsv")
+
+compressed_file_writer("./test2.cbt", dictionary2, columns2, sel2)
 
 #print(arr)
