@@ -12,7 +12,8 @@ def compression_algorithm(input_file):
     else:
         return -1
 
-    columns = df.columns
+    columns = df.columns.to_list()
+    #print(columns)
     array = df.to_numpy()
 
     #will be add select 1 as a option too
@@ -34,16 +35,26 @@ def compression_algorithm(input_file):
         dictionary_of_strains_data[strain_name] = temp_list
 
     
-    return dictionary_of_strains_data
+    return dictionary_of_strains_data, columns, selection
 
 
-def compressed_file_writer(outfile, dictionary_of_strains_data):
+def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selection):
 
     with open(outfile, "w") as compressed_file:
-        print("a")
+        compressed_file.write(str(selection))
+        for col in columns[1:]:
+            compressed_file.write(";" + str(col))
+        compressed_file.write("\n")
+
+        for key in dictionary_of_strains_data.keys():
+            compressed_file.write(str(key))
+            for index in dictionary_of_strains_data[key]:
+                compressed_file.write(";" + str(index))
 
 
 
+dictionary, columns, sel = compression_algorithm("./combined_binary_mutations_non_snp_corrected_0.2_column_corrected.tsv")
 
-compression_algorithm("./amikacin_snps.tsv")
+compressed_file_writer("./test.cbt", dictionary, columns, sel)
+
 #print(arr)
