@@ -1,5 +1,5 @@
 import pandas as pd
-
+import argparse
 
 # Compresses the binary table
 def compression_algorithm(input_file):
@@ -135,12 +135,26 @@ def decompress_file_printer(outfile_name, all_the_strains, outfile_type="tsv"):
     return 0
 
 
-dictionary, columns, sel = compression_algorithm("./combined_binary_mutations_non_snp_corrected_0.05.tsv")
+if __name__ == "__main__":
 
-compressed_file_writer("./test.cbt", dictionary, columns, sel)
+    parser = argparse.ArgumentParser(description='Compression of Binary Mutation Tables')
 
-dictionary2, columns2, sel2 = compression_algorithm("/scratch/SCRATCH_SAS/alper/Mycobacterium/non_dropped/combined_binary_mutations.tsv")
+    parser.add_argument("-i", help="Path of input file", required=True)
 
-compressed_file_writer("./test2.cbt", dictionary2, columns2, sel2)
+    parser.add_argument("-o", help="Path of output file", required=True)
+
+    parser.add_argument("-t", help="Type of output file, either csv or tsv", default="tsv")
+
+    args = parser.parse_args()
+
+
+
+# dictionary, columns, sel = compression_algorithm("./combined_binary_mutations_non_snp_corrected_0.05.tsv")
+
+# compressed_file_writer("./test.cbt", dictionary, columns, sel)
+
+# dictionary2, columns2, sel2 = compression_algorithm("/scratch/SCRATCH_SAS/alper/Mycobacterium/non_dropped/combined_binary_mutations.tsv")
+
+# compressed_file_writer("./test2.cbt", dictionary2, columns2, sel2)
 
 #print(arr)
