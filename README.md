@@ -2,11 +2,11 @@
  
 ## Basic Usage:
 
-'''$bash
+```console
 
 cbt -i input_file -o output_file -c 
 
-'''
+```
 
 ## Options:
 
