@@ -1,0 +1,16 @@
+package:
+  name: "cbt"
+  version: "0.01"
+about:
+  summary: "Compresses binary tables"
+source:
+  path: ..
+build:
+  script: pip install .
+requirements:
+  host:
+    - python
+    - pip
+  run:
+  - python 
+  - biopython
