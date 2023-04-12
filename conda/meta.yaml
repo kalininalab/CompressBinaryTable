@@ -6,7 +6,7 @@ about:
 source:
   path: ..
 build:
-  script: pip install .
+  script: ../cbt.py
 requirements:
   host:
     - python
