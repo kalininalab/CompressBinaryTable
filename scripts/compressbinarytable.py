@@ -11,10 +11,10 @@ def compression_algorithm(input_file):
 
     if input_file.endswith(".csv"):
         df = pd.read_csv(input_file, sep=",", dtype={"name/position": str, "outcome": int, "*": int})
-        print("CSV")
+        
     elif input_file.endswith(".tsv"):
         df = pd.read_csv(input_file, sep="\t", dtype={"name/position": str, "outcome": int, "*": int})
-        print("TSV")
+       
     else:
         return -1
 
@@ -47,7 +47,10 @@ def compression_algorithm(input_file):
 # Writes compressed file into outfile 
 def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selection):
 
-    with open(outfile, "w") as compressed_file:
+    if outfile_name.endswith(".cbt"):
+        outfile_name = outfile_name[:-4]
+
+    with open(outfile + ".cbt", "w") as compressed_file:
         compressed_file.write(str(selection))
         for col in columns[1:]:
             compressed_file.write(";" + str(col))
@@ -127,6 +130,12 @@ def decompress_file_printer(outfile_name, all_the_strains, outfile_type):
     else:
         print("Outfile type can be only csv or tsv")
         return -1
+    
+    if outfile_name.endswith(".tsv"):
+        outfile_name = outfile_name[:-4]
+    
+    if outfile_name.endswith(".csv"):
+        outfile_name = outfile_name[:-4]
 
     with open(outfile_name + ".%s" %outfile_type , "w") as ofile:
 
@@ -140,6 +149,7 @@ def decompress_file_printer(outfile_name, all_the_strains, outfile_type):
     return 0
 
 
+# Returns numpy array of file as uncompressed, useful for ML (same as load as pandas df, and to_numpy())
 def cbt_to_array(compressed_file):
 
     # Check if given file is properly formatted
@@ -187,6 +197,7 @@ def cbt_to_array(compressed_file):
     return return_array
 
 
+# Returns numpy array of name of the mutations as uncompressed, useful for ML, (same as load pandas df and use df.colums)
 def cbt_columns(compressed_file):
 
     # Check if given file is properly formatted
@@ -233,8 +244,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    print(args)
-
     if not os.path.exists(args.i):
         print("Input file is not exist, please provide input file")
         exit()
@@ -280,5 +289,3 @@ if __name__ == "__main__":
     else:
         print("You need to select either Compression -c or Decompression -d")
         exit()
-
-
