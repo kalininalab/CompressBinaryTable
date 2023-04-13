@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import pandas as pd
 import numpy as np
@@ -66,18 +66,18 @@ def decompress_file(compressed_file):
 
     # Check if given file is properly formatted
 
-    if not compressed_file.endswiht(".cbt"):
+    if not compressed_file.endswith(".cbt"):
         print("Given file is not cbt format")
         return -1
 
     with open(compressed_file) as infile:
         lines = infile.readlines()
 
-    default_value = str(lines[0].split(";")[0])
+    indexed_value = str(lines[0].split(";")[0])
 
     # Checks if it is binary matrix
 
-    if default_value not in ["0" ,"1"]:
+    if indexed_value not in ["0" ,"1"]:
         print("Given table is not binary")
         return -1
     
@@ -85,10 +85,10 @@ def decompress_file(compressed_file):
 
     # Set the value which will printed to indexes
     
-    if default_value == "0":
-        indexed_value = "1"
+    if indexed_value == "0":
+        default_value = "1"
     else:
-        indexed_value = "0"
+        default_value = "0"
     
     columns = lines[0][1:]
 
@@ -96,18 +96,18 @@ def decompress_file(compressed_file):
 
     first_line.append("name/position")
     columns_split = columns.split(";")
-    for col in columns_split:
-        first_line.append(col)
+    for col in columns_split[1:]:
+        first_line.append(col.strip())
 
     all_the_strains.append(first_line)
 
     for line in lines[1:]:
         splitted = line.split(";")
-        strain_name = splitted[0]
-        temp_list = [default_value for _ in range(len(columns.split(";"))+1)]
+        strain_name = splitted[0].strip()
+        temp_list = [default_value for _ in range(len(columns.split(";")))]
         temp_list[0] = strain_name
         for index in splitted[1:]:
-            temp_list[index] = indexed_value
+            temp_list[int(index)+1] = indexed_value
 
         all_the_strains.append(temp_list)
 
@@ -131,7 +131,7 @@ def decompress_file_printer(outfile_name, all_the_strains, outfile_type):
     with open(outfile_name + ".%s" %outfile_type , "w") as ofile:
 
         for line in all_the_strains:
-            ofile.write(str(line[0]))
+            ofile.write(str(line[0].strip()))
             for elem in line[1:]:
                 ofile.write(seperator + str(elem))
             
@@ -144,7 +144,7 @@ def cbt_to_array(compressed_file):
 
     # Check if given file is properly formatted
 
-    if not compressed_file.endswiht(".cbt"):
+    if not compressed_file.endswith(".cbt"):
         print("Given file is not cbt format")
         return -1
 
@@ -173,14 +173,16 @@ def cbt_to_array(compressed_file):
     for line in lines[1:]:
         splitted = line.split(";")
         strain_name = splitted[0]
-        temp_list = [default_value for _ in range(len(columns.split(";"))+1)]
+        temp_list = [indexed_value for _ in range(len(columns.split(";")))]
         temp_list[0] = strain_name
         for index in splitted[1:]:
-            temp_list[index] = indexed_value
+            temp_list[int(index)+1] = default_value
 
         all_the_strains.append(temp_list)
 
     return_array = np.array(all_the_strains)
+
+    #return_array[0:,1:].astype(int)
 
     return return_array
 
@@ -189,7 +191,7 @@ def cbt_columns(compressed_file):
 
     # Check if given file is properly formatted
 
-    if not compressed_file.endswiht(".cbt"):
+    if not compressed_file.endswith(".cbt"):
         print("Given file is not cbt format")
         return -1
 

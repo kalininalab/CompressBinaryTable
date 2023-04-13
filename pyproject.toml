@@ -1,18 +1,15 @@
-[tool.poetry]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "compressbinarytable"
 version = "0.1.4"
 description = "Compresses binary tables"
-authors = ["Alper Yurtseven <alper.yurtseven@helmholtz-hips.de>"]
+authors = [{ name="Alper Yurtseven", email="alper.yurtseven@helmholtz-hips.de"},]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.9"
-pandas = "^1.5.0"
-numpy = "^1.24.2"
-
-[tool.poetry.scripts]
-compressbinarytable = "compressbinarytable.compressbinarytable:main"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.7"
+dependencies = [
+    "pandas >= 1.5.0",
+    "numpy >= 1.24.2"
+]

@@ -1,0 +1,20 @@
+package:
+  name: "compressbinarytable"
+  version: "0.1.5"
+about:
+  summary: "Compresses binary tables"
+source:
+  path: ..
+build:
+  script: pip install .
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+    - numpy
+    - pandas
+  run:
+    - python 
+    - numpy
+    - pandas

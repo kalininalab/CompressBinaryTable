@@ -1,7 +1,0 @@
-README.md
-pyproject.toml
-setup.py
-compressbinarytable.egg-info/PKG-INFO
-compressbinarytable.egg-info/SOURCES.txt
-compressbinarytable.egg-info/dependency_links.txt
-compressbinarytable.egg-info/top_level.txt

@@ -1,16 +1,11 @@
 from distutils.core import setup
 
 setup(name='compressbinarytable',
-      version="0.1.4",
+      version="0.1.5",
       description='Compresses binary tables',
       author='Alper Yurtseven',
       author_email='alper.yurtseven@helmholtz-hips.de',
-      license='',
+      license='GPL3+',
       packages=['compressbinarytable'],
-      scripts=['compressbinarytable/compressbinarytable.py'],
-      entry_points={
-        'console_scripts': [
-            'compressbinarytable.compressbinarytable:main'
-        ]
-    }
+      scripts=['scripts/compressbinarytable']
 )
