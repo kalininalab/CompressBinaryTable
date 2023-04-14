@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "compressbinarytable"
-version = "0.1.8"
-repository = ""
+version = "0.1.9"
+repository = "https://github.com/kalininalab/CompressBinaryTable"
 readme = "README.md"
 description = "Compression of binary table"
 authors = ["Alper Yurtseven <alper.yurtseven@helmholtz-hips.de>"]
