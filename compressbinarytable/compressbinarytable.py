@@ -290,8 +290,6 @@ def main():
         print("You need to select either Compression -c or Decompression -d")
         exit()
 
-    
-
  
 if __name__ == "__main__":
     main()
