@@ -47,8 +47,8 @@ def compression_algorithm(input_file):
 # Writes compressed file into outfile 
 def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selection):
 
-    if outfile_name.endswith(".cbt"):
-        outfile_name = outfile_name[:-4]
+    if outfile.endswith(".cbt"):
+        outfile = outfile[:-4]
 
     with open(outfile + ".cbt", "w") as compressed_file:
         compressed_file.write(str(selection))
@@ -228,7 +228,7 @@ def main():
 
     # Main function to call from command line
 
-    parser = argparse.ArgumentParser(description='Compression of Binary Mutation Tables')
+    parser = argparse.ArgumentParser(description='Compression of Binary Tables')
 
     parser.add_argument("-c", help="Compression flag", action="store_true")
 
