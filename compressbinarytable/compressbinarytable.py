@@ -224,9 +224,9 @@ def cbt_columns(compressed_file):
     return return_array 
 
 
-def main(args):
+def main():
 
-     # Main function to call from command line
+    # Main function to call from command line
 
     parser = argparse.ArgumentParser(description='Compression of Binary Mutation Tables')
 
@@ -290,7 +290,9 @@ def main(args):
         print("You need to select either Compression -c or Decompression -d")
         exit()
 
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
     
+
+ 
+if __name__ == "__main__":
+    main()
+     
