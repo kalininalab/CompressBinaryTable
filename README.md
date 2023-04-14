@@ -37,13 +37,19 @@ cbt_columns(compressed_file)
 
 ### CSV:
 
+```
+
 strain_name,mut1,mut2,mut3,mut4,outcome
 strain1,0,1,1,1,1,1
 strain2,0,0,1,1,1,0
 strain3,0,1,0,1,1,0
 strain4,1,1,1,1,1,1
 
+```
+
 ### TSV:
+
+```
 
 strain_name mut1    mut2    mut3    mut4    outcome
 strain1 0   1   1   1   1   1
@@ -51,13 +57,19 @@ strain2 0   0   1   1   1   0
 strain3 0   1   0   1   1   0
 strain4 1   1   1   1   1   1
 
+```
+
 ### CBT:
+
+```
 
 1;mut1;mut2;mut3;mut4;outcome
 strain1;6;43;87;102
 strain2;16;43;87;102
 strain3;6;53;78;112
 strain4;61;413;824;942
+
+```
 
 
 
