@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "compressbinarytable"
-version = "0.1.9"
+version = "0.2.0"
 repository = "https://github.com/kalininalab/CompressBinaryTable"
 readme = "README.md"
 description = "Compression of binary table"
