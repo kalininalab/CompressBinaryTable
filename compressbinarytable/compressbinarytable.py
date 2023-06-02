@@ -30,6 +30,8 @@ def compression_algorithm(input_file):
 
     undefined_strain_counter = 1
 
+    strain_names_exist = True
+
     for strain in array:
         strain_list = strain.tolist()
 
@@ -48,6 +50,7 @@ def compression_algorithm(input_file):
         else:
             strain_name = "undefined_%s" % undefined_strain_counter
             undefined_strain_counter += 1
+            strain_names_exist = False
             index_counter = 0
             temp_list = []
             for elem in strain_list[0:]:
@@ -59,7 +62,7 @@ def compression_algorithm(input_file):
             dictionary_of_strains_data[strain_name] = temp_list
 
     
-    return dictionary_of_strains_data, columns, selection
+    return dictionary_of_strains_data, columns, selection, strain_names_exist
 
 
 def decide_compression_selection(array):
@@ -86,16 +89,22 @@ def decide_compression_selection(array):
 
 
 # Writes compressed file into outfile 
-def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selection):
+def compressed_file_writer(outfile, dictionary_of_strains_data, columns, selection, strain_names_exist):
 
     if outfile.endswith(".cbt"):
         outfile = outfile[:-4]
 
     with open(outfile + ".cbt", "w") as compressed_file:
         compressed_file.write(str(selection))
-        for col in columns[1:]:
-            compressed_file.write(";" + str(col))
-        compressed_file.write("\n")
+        if strain_names_exist:
+            for col in columns[1:]:
+                compressed_file.write(";" + str(col))
+            compressed_file.write("\n")
+        
+        else:
+            for col in columns[0:]:
+                compressed_file.write(";" + str(col))
+            compressed_file.write("\n")
 
         for key in dictionary_of_strains_data.keys():
             compressed_file.write(str(key))
@@ -306,8 +315,8 @@ def main():
 
         # Maybe add randomized movie quotes here 
 
-        dictionary, columns, sel = compression_algorithm(args.i)
-        compressed_file_writer(args.o, dictionary, columns, sel)
+        dictionary, columns, sel, strain_names_exist = compression_algorithm(args.i)
+        compressed_file_writer(args.o, dictionary, columns, sel, strain_names_exist)
 
         print("Compression ended, compressed file can be found at %s" % args.o)
 
