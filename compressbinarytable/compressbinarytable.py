@@ -19,29 +19,70 @@ def compression_algorithm(input_file):
         return -1
 
     columns = df.columns.to_list()
-    #print(columns)
+    
     array = df.to_numpy()
 
-    #will be add select 1 as a option too
-    selection = 1
+    selection = decide_compression_selection(array)
 
     dictionary_of_strains_data = {}
 
+    not_strain_names = ["0", "1", 0, 1]
+
+    undefined_strain_counter = 1
+
     for strain in array:
         strain_list = strain.tolist()
-        strain_name = strain_list[0]
-        index_counter = 0
-        temp_list = []
-        for elem in strain_list[1:]:
-            if elem == selection or elem == str(selection):
-                temp_list.append(index_counter)
+
+        if strain_list[0] not in not_strain_names:
+            strain_name = strain_list[0]
+            index_counter = 0
+            temp_list = []
+            for elem in strain_list[1:]:
+                if elem == selection or elem == str(selection):
+                    temp_list.append(index_counter)
+                
+                index_counter += 1
             
-            index_counter += 1
+            dictionary_of_strains_data[strain_name] = temp_list
         
-        dictionary_of_strains_data[strain_name] = temp_list
+        else:
+            strain_name = "undefined_%s" % undefined_strain_counter
+            undefined_strain_counter += 1
+            index_counter = 0
+            temp_list = []
+            for elem in strain_list[0:]:
+                if elem == selection or elem == str(selection):
+                    temp_list.append(index_counter)
+                
+                index_counter += 1
+            
+            dictionary_of_strains_data[strain_name] = temp_list
 
     
     return dictionary_of_strains_data, columns, selection
+
+
+def decide_compression_selection(array):
+
+    possible_ones = ["1", 1]
+    possible_zeros = ["0", 0]
+
+    zeros_count = 0
+    ones_count = 0
+
+    for strain in array:
+        strain_list = strain.tolist()
+        for elem in strain_list:
+            if elem in possible_zeros:
+                zeros_count += 1
+            elif elem in possible_ones:
+                ones_count += 1
+
+
+    if ones_count < zeros_count:
+        return 1
+    else:
+        return 0
 
 
 # Writes compressed file into outfile 
@@ -246,18 +287,18 @@ def main():
 
     if not os.path.exists(args.i):
         print("Input file is not exist, please provide input file")
-        exit()
+        sys.exit()
 
     if os.path.exists(args.o):
         if not args.override:
             print("Output file is already exist, use --override if you want to override")
             print("Warning : The old file will be overriden!")
-            exit()
+            sys.exit()
 
     if args.c and args.d:
 
         print("You need to select either Compression -c or Decompression -d")
-        exit()
+        sys.exit()
 
     if args.c:
 
@@ -272,7 +313,7 @@ def main():
 
         print("Have a nice day!")
 
-        exit()
+        sys.exit()
 
     if args.d:
 
@@ -284,11 +325,11 @@ def main():
 
         print("Have a nice day!")
 
-        exit()
+        sys.exit()
     
     else:
         print("You need to select either Compression -c or Decompression -d")
-        exit()
+        sys.exit()
 
  
 if __name__ == "__main__":
